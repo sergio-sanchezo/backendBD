@@ -185,11 +185,12 @@ export const login = async (req: express.Request, res: express.Response) => {
 };
 
 export const revalidateToken = async (req: any, res: express.Response) => {
-  const { role } = req;
+  const { userInfo } = req;
+  const { ...data } = userInfo;
   const token = await generarJWT(req.userInfo);
   res.json({
     ok: "true",
     token,
-    role,
+    data,
   });
 };
