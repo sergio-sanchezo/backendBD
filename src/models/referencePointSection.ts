@@ -20,6 +20,7 @@ const referencePointSection = db.define(
   },
   {
     timestamps: false,
+    initialAutoIncrement: "5000",
   }
 );
 

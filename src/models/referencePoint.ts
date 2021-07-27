@@ -17,6 +17,7 @@ const referencePoint = db.define(
   },
   {
     timestamps: false,
+    initialAutoIncrement: "4000",
   }
 );
 

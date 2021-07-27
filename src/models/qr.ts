@@ -18,6 +18,7 @@ const QR = db.define(
   },
   {
     timestamps: false,
+    initialAutoIncrement: "3000",
   }
 );
 

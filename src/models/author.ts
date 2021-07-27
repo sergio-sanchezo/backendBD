@@ -18,6 +18,7 @@ const Author = db.define(
   },
   {
     timestamps: false,
+    initialAutoIncrement: "1000",
   }
 );
 
