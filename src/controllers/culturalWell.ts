@@ -30,7 +30,7 @@ export const createCulturalWell = async (
   const { body } = req;
   try {
     await db.query(
-      "INSERT INTO culturalwells (ctw_email, ctw_createdDate, ctw_address, ctw_phone, ctw_name, ctw_director, ctw_webSite, ctw_referencePoint ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO culturalwells (ctw_email, ctw_createdDate, ctw_address, ctw_phone, ctw_name, ctw_director, ctw_webSite ) VALUES (?, ?, ?, ?, ?, ?, ?)",
       {
         model: culturalWell,
         replacements: [
@@ -41,7 +41,6 @@ export const createCulturalWell = async (
           body.name,
           body.director,
           body.website,
-          body.referencePoint,
         ],
         type: QueryTypes.INSERT,
       }
@@ -96,6 +95,46 @@ export const deleteCulturalWell = async (req: any, res: express.Response) => {
     });
   } catch (error) {
     console.error(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Por favor contacte a un administrador",
+    });
+  }
+};
+
+export const groupedRpByAmount = async (req: any, res: express.Response) => {
+  try {
+    const results = await db.query(
+      "SELECT ctw_name as ctw, count(rfp_id) as amount FROM culturalwells LEFT JOIN referencepoints ON referencepoints.rfp_culturalWell = culturalwells.ctw_id GROUP BY ctw_name",
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
+    res.json({
+      ok: true,
+      results,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      msg: "Por favor contacte a un administrador",
+    });
+  }
+};
+
+export const groupedQRByAmount = async (req: any, res: express.Response) => {
+  try {
+    const results = await db.query(
+      "SELECT  ctw_name as ctw, count(qr_id) as amount FROM culturalwells LEFT JOIN qrs ON qrs.qr_culturalWell = culturalwells.ctw_id GROUP BY ctw_name",
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
+    res.json({
+      ok: true,
+      results,
+    });
+  } catch (error) {
     return res.status(500).json({
       ok: false,
       msg: "Por favor contacte a un administrador",

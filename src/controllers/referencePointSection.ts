@@ -108,3 +108,25 @@ export const deletereferencePointSection = async (
     });
   }
 };
+
+export const getReferencePointSectionView = async (
+  req: any,
+  res: express.Response
+) => {
+  try {
+    const results = await db.query("SELECT * FROM vw_referencePointSections", {
+      type: QueryTypes.SELECT,
+    });
+    res.json({
+      ok: true,
+      msg: "getReferencePointSection View",
+      results,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Por favor contacte a un administrador",
+    });
+  }
+};

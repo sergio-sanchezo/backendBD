@@ -1,8 +1,7 @@
 import express from "express";
-import { QueryTypes, where } from "sequelize";
+import { QueryTypes } from "sequelize";
 import { db } from "../database/config";
-import Author from "../models/author";
-import author from "../models/author";
+import { default as Author, default as author } from "../models/author";
 
 export const getauthor = async (req: any, res: express.Response) => {
   try {
@@ -86,6 +85,25 @@ export const deleteauthor = async (req: any, res: express.Response) => {
     return res.status(200).json({
       ok: true,
       msg: "deleteauthor",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Por favor contacte a un administrador",
+    });
+  }
+};
+
+export const getAuthorView = async (req: any, res: express.Response) => {
+  try {
+    const results = await db.query("SELECT * FROM vw_authors", {
+      type: QueryTypes.SELECT,
+    });
+    res.json({
+      ok: true,
+      msg: "getAuthor View",
+      results,
     });
   } catch (error) {
     console.error(error);

@@ -6,10 +6,11 @@ const QR = db.define(
   "QRs",
   {
     qr_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    qr_image: { type: DataTypes.STRING, allowNull: false },
+    qr_image: { type: DataTypes.STRING(200), allowNull: false },
     qr_culturalWell: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      unique: true,
       references: {
         model: culturalWell,
         key: "ctw_id",

@@ -31,7 +31,7 @@ export const createreferencePoint = async (
   console.log(body.createdDate);
   try {
     await db.query(
-      "INSERT INTO referencePoints (rfp_name, rfp_createdDate, rfp_description, rfp_location, rfp_summary ) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO referencePoints (rfp_name, rfp_createdDate, rfp_description, rfp_location, rfp_summary, rfp_culturalWell ) VALUES (?, ?, ?, ?, ?, ?)",
       {
         model: referencePoint,
         replacements: [
@@ -40,6 +40,7 @@ export const createreferencePoint = async (
           body.description,
           body.location,
           body.summary,
+          body.culturalWell,
         ],
         type: QueryTypes.INSERT,
       }
@@ -91,6 +92,50 @@ export const deletereferencePoint = async (req: any, res: express.Response) => {
     return res.status(200).json({
       ok: true,
       msg: "deletereferencePoint",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Por favor contacte a un administrador",
+    });
+  }
+};
+
+export const getReferencePointView = async (
+  req: any,
+  res: express.Response
+) => {
+  try {
+    const results = await db.query("SELECT * FROM vw_referencePoints", {
+      type: QueryTypes.SELECT,
+    });
+    res.json({
+      ok: true,
+      msg: "getReferencePoint View",
+      results,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Por favor contacte a un administrador",
+    });
+  }
+};
+
+export const countReferencePoints = async (req: any, res: express.Response) => {
+  try {
+    const [{ amount }] = await db.query(
+      "SELECT count(*) as amount FROM vw_referencePoints",
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
+    res.json({
+      ok: true,
+      msg: "countReferencePoints",
+      amount,
     });
   } catch (error) {
     console.error(error);

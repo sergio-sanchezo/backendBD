@@ -90,3 +90,22 @@ export const deleteQR = async (req: any, res: express.Response) => {
     });
   }
 };
+
+export const getQRView = async (req: any, res: express.Response) => {
+  try {
+    const results = await db.query("SELECT * FROM vw_qrs", {
+      type: QueryTypes.SELECT,
+    });
+    res.json({
+      ok: true,
+      msg: "getQR View",
+      results,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Por favor contacte a un administrador",
+    });
+  }
+};

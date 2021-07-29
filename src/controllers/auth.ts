@@ -166,7 +166,6 @@ export const login = async (req: express.Request, res: express.Response) => {
     // Generar JWT
 
     const token = await generarJWT(dataValues);
-    // console.log(user);
 
     res.status(200).json({
       ok: true,
