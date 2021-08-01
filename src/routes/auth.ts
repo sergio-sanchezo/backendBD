@@ -15,10 +15,9 @@ import { validateJWT } from "../middlewares/validateJWT";
 const router = Router();
 
 router.post("/new", createUserVisitant);
+router.post("/newAdmin", createUserAdmin);
 
 router.post("/", login);
-
-router.post("/newAdmin", createUserAdmin);
 
 router.get("/renew", validateJWT, revalidateToken);
 

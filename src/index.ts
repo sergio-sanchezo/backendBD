@@ -10,6 +10,7 @@ import author from "./routes/author";
 import qr from "./routes/qr";
 import referencePoint from "./routes/referencePoint";
 import user from "./routes/user";
+import visit from "./routes/visit";
 import referencePointSection from "./routes/referencePointSection";
 import { dbConnection, syncDb } from "./database/config";
 
@@ -43,6 +44,7 @@ app.use("/api/qr", qr);
 app.use("/api/referencePointSection", referencePointSection);
 app.use("/api/referencePoint", referencePoint);
 app.use("/api/user", user);
+app.use("/api/visit", visit);
 
 // starting the server
 app.listen(process.env.PORT || 4000, () => {

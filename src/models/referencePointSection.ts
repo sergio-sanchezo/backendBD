@@ -12,6 +12,7 @@ const referencePointSection = db.define(
     rps_referencePoint: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      unique: true,
       references: {
         model: referencePoint,
         key: "rfp_id",

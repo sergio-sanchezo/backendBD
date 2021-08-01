@@ -54,7 +54,7 @@ export const createUserVisitant = async (
       // console.log(newUser);
       const token = await generarJWT(newUser);
       res.status(201).json({
-        ok: "true",
+        ok: true,
         email: data.email,
         name: data.name,
         role: "visitante",
