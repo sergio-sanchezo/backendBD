@@ -36,6 +36,17 @@ FOR EACH ROW
 	END; |
 DELIMITER ;
 
+DELIMITER |
+CREATE TRIGGER tr_deleteReferencePointSection BEFORE DELETE ON referencepointsections
+FOR EACH ROW 
+	BEGIN
+		DECLARE referencePointSectionId INT;
+		SET referencePointSectionId = OLD.rps_id;
+        DELETE FROM visits WHERE vst_referencePointSection = referencePointSectionId;
+        
+	END; |
+DELIMITER ;
+
 -- PROCEDURES
 DELIMITER |
 CREATE PROCEDURE createVisit(IN referencePointSectionId INT, IN userDocument INT, IN dateVisit DATE)
@@ -44,6 +55,6 @@ BEGIN
 END; |
 DELIMITER ;
 
+-- INDEX
+CREATE UNIQUE INDEX idx_culturalWellNumber ON culturalwells (ctw_phone);
 
-describe qrs;
-describe referencepointsections;
