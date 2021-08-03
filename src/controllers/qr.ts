@@ -1,7 +1,9 @@
 import express from "express";
 import { QueryTypes } from "sequelize";
 import { db } from "../database/config";
+import QRCode from "qrcode";
 import QR from "../models/qr";
+import culturalWell from "../models/culturalWell";
 
 export const getQR = async (req: any, res: express.Response) => {
   try {
@@ -25,18 +27,46 @@ export const getQR = async (req: any, res: express.Response) => {
 
 export const createQR = async (req: express.Request, res: express.Response) => {
   const { body } = req;
+  // console.log(body.culturalWell[0]);
   try {
-    await db.query(
-      "INSERT INTO QRs (qr_image, qr_culturalWell ) VALUES (?, ?)",
+    const ctw: any = await db.query(
+      "SELECT * FROM culturalwells WHERE culturalwells.ctw_id = ?",
       {
-        model: QR,
-        replacements: [body.image, body.culturalWell],
-        type: QueryTypes.INSERT,
+        model: culturalWell,
+        replacements: [body.culturalWell[0]],
+        type: QueryTypes.SELECT,
       }
     );
-    return res.status(201).json({
-      ok: true,
-      msg: "createQR",
+    console.log(ctw[0].dataValues);
+    const QRinfo = {
+      email: ctw[0].dataValues.ctw_email,
+      phone: ctw[0].dataValues.ctw_phone,
+      webSite: ctw[0].dataValues.ctw_webSite,
+    };
+    const toEncode = JSON.stringify(QRinfo);
+
+    QRCode.toDataURL(toEncode, async function (err: any, url: any) {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          msg: "Por favor contacte a un administrador",
+        });
+      }
+      const info = {} as any;
+      info.image = url;
+      info.culturalWell = body.culturalWell;
+      await db.query(
+        "INSERT INTO QRs (qr_image, qr_culturalWell ) VALUES (?, ?)",
+        {
+          model: QR,
+          replacements: [info.image, info.culturalWell],
+          type: QueryTypes.INSERT,
+        }
+      );
+      return res.status(201).json({
+        ok: true,
+        msg: "success",
+      });
     });
   } catch (error) {
     console.error(error);
@@ -107,5 +137,19 @@ export const getQRView = async (req: any, res: express.Response) => {
       ok: false,
       msg: "Por favor contacte a un administrador",
     });
+  }
+};
+
+export const makeQr = async (req: any, res: express.Response) => {
+  try {
+    const toEncode = JSON.stringify(req.body);
+    QRCode.toDataURL(toEncode, function (err: any, url: any) {
+      if (err) return console.log("error occured");
+      res.json({
+        url,
+      });
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

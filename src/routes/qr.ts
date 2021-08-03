@@ -9,6 +9,7 @@ import {
   deleteQR,
   getQR,
   getQRView,
+  makeQr,
   updateQR,
 } from "../controllers/qr";
 import { validateJWT } from "../middlewares/validateJWT";
@@ -22,6 +23,9 @@ router.get("/", getQR);
 router.post("/", createQR);
 router.put("/", updateQR);
 router.delete("/", deleteQR);
+
+// QR
+router.post("/makeQr", makeQr);
 
 // VIEWS
 router.get("/view", getQRView);
